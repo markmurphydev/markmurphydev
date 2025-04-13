@@ -1,3 +1,6 @@
+# Secrets
+**/*.secret.exs
+
 # The directory Mix will write compiled artifacts to.
 /_build/
 
@@ -34,4 +37,3 @@ markmurphydev-*.tar
 # In case you use Node.js/npm, you want to ignore these.
 npm-debug.log
 /assets/node_modules/
-

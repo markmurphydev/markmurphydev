@@ -19,8 +19,6 @@ config :markmurphydev, Markmurphydev.Repo,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 
-
-
 # Configures the endpoint
 config :markmurphydev, MarkmurphydevWeb.Endpoint,
   url: [host: "localhost"],
@@ -40,6 +38,9 @@ config :markmurphydev, MarkmurphydevWeb.Endpoint,
 # For production it's recommended to configure a different adapter
 # at the `config/runtime.exs`.
 config :markmurphydev, Markmurphydev.Mailer, adapter: Swoosh.Adapters.Local
+
+# Use tzdata for timezone info
+config :elixir, :time_zone_database, Tzdata.TimeZoneDatabase
 
 # Configure esbuild (the version is required)
 config :esbuild,
@@ -74,3 +75,7 @@ config :phoenix, :json_library, Jason
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{config_env()}.exs"
+
+if(config_env() == :dev) do
+  import_config "dev.secret.exs"
+end
