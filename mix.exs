@@ -75,7 +75,15 @@ defmodule Markmurphydev.MixProject do
       "ecto.setup": ["ecto.create", "ecto.migrate", "run priv/repo/seeds.exs"],
       "ecto.reset": ["ecto.drop", "ecto.setup"],
       test: ["ecto.create --quiet", "ecto.migrate --quiet", "test"],
-      "assets.setup": ["tailwind.install --if-missing", "esbuild.install --if-missing"],
+      "assets.setup": [
+        """
+        export HERO_VSN="2.0.16" ; \
+        curl -L "https://github.com/tailwindlabs/heroicons/archive/refs/tags/v${HERO_VSN}.tar.gz" | \
+        tar -xvz --strip-components=1 heroicons-${HERO_VSN}/optimized
+        """,
+        "tailwind.install --if-missing",
+        "esbuild.install --if-missing"
+      ],
       "assets.build": ["tailwind markmurphydev", "esbuild markmurphydev"],
       "assets.deploy": [
         "tailwind markmurphydev --minify",

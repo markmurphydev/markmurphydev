@@ -2,10 +2,6 @@ import Config
 
 # Configure your database
 config :markmurphydev, Markmurphydev.Repo,
-  username: "postgres",
-  password: "postgres",
-  hostname: "localhost",
-  database: "markmurphydev_dev",
   stacktrace: true,
   show_sensitive_data_on_connection_error: true,
   pool_size: 10

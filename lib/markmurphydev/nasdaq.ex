@@ -7,7 +7,7 @@ defmodule Markmurphydev.Nasdaq do
   end
 
   defp nasdaq_request() do
-    api_key = Application.get_env(:markmurphydev, :polygon_api_key)
+    [polygon_api_key: api_key] = Application.get_env(:markmurphydev, Markmurphydev.Nasdaq)
     # Nasdaq 100 -- It's the only one Polygon will let me seeeee
     dow_jones_ticker = "I:NDX"
     timespan_increment = 1

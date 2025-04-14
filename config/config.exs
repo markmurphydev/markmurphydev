@@ -12,10 +12,6 @@ config :markmurphydev,
   generators: [timestamp_type: :utc_datetime]
 
 config :markmurphydev, Markmurphydev.Repo,
-  username: "postgres",
-  password: "postgres",
-  hostname: "localhost",
-  database: "markmurphydev_dev",
   show_sensitive_data_on_connection_error: true,
   pool_size: 10
 
@@ -75,7 +71,3 @@ config :phoenix, :json_library, Jason
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
 import_config "#{config_env()}.exs"
-
-if(config_env() == :dev) do
-  import_config "dev.secret.exs"
-end

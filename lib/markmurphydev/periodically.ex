@@ -8,6 +8,7 @@ defmodule Markmurphydev.Periodically do
   end
 
   def init(state) do
+    Process.send(self(), :work, [])
     schedule_work()
     {:ok, state}
   end
@@ -21,6 +22,6 @@ defmodule Markmurphydev.Periodically do
 
   defp schedule_work() do
     # 2 hours in ms
-    Process.send_after(self(), :work, 2 * 60 * 60 * 1000)
+    Process.send_after(self(), :work, 6 * 60 * 60 * 1000)
   end
 end

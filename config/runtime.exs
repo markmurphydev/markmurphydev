@@ -20,19 +20,27 @@ if System.get_env("PHX_SERVER") do
   config :markmurphydev, MarkmurphydevWeb.Endpoint, server: true
 end
 
-if config_env() == :prod do
-  database_url =
-    System.get_env("DATABASE_URL") ||
-      raise """
-      environment variable DATABASE_URL is missing.
-      For example: ecto://USER:PASS@HOST/DATABASE
-      """
+database_url =
+  System.get_env("DATABASE_URL") ||
+    raise """
+    environment variable DATABASE_URL is missing.
+    For example: ecto://USER:PASS@HOST/DATABASE
+    """
 
+polygon_api_key =
+  System.get_env("POLYGON_API_KEY") ||
+    raise """
+    environment variable POLYGON_API_KEY is missing.
+    """
+
+config :markmurphydev, Markmurphydev.Nasdaq, polygon_api_key: polygon_api_key
+config :markmurphydev, Markmurphydev.Repo, url: database_url
+
+if config_env() == :prod do
   maybe_ipv6 = if System.get_env("ECTO_IPV6") in ~w(true 1), do: [:inet6], else: []
 
   config :markmurphydev, Markmurphydev.Repo,
     # ssl: true,
-    url: database_url,
     pool_size: String.to_integer(System.get_env("POOL_SIZE") || "10"),
     socket_options: maybe_ipv6
 

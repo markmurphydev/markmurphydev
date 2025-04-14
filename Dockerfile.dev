@@ -1,0 +1,16 @@
+FROM hexpm/elixir:1.18.3-erlang-27.2.4-debian-bullseye-20250407-slim
+
+RUN apt-get update -y && \
+    apt-get install -y build-essential git && \
+    apt-get install -y inotify-tools && \
+    apt-get clean && rm -f /var/lib/apt/lists/*_*
+
+RUN pwd
+
+ENV MIX_ENV="dev"
+WORKDIR /
+
+RUN mix local.hex --force && \
+    mix local.rebar --force
+
+WORKDIR /app
