@@ -1,0 +1,89 @@
+# Scrape Dow Jones from Yahoo
+
+```elixir
+Mix.install([
+  {:req, "~> 0.5.10"},
+  {:floki, "~> 0.37.1"},
+  {:timex, "~> 3.7.11"},
+  {:tz, "~> 0.28.0"}
+])
+Calendar.put_time_zone_database(Tz.TimeZoneDatabase)
+
+```
+
+## Section
+
+```elixir
+res = Req.get!("https://finance.yahoo.com/quote/%5EDJI/")
+doc = res.body |> Floki.parse_document!
+:ok
+```
+
+```elixir
+{_, _, [price_str]} = doc
+|> Floki.find("span[data-testid=qsp-price]")
+|> List.first
+price_str
+```
+
+```elixir
+price = price_str
+|> String.trim
+|> String.replace(",", "")
+|> String.to_float
+price
+```
+
+```elixir
+{_, _, [price_diff_str]} = doc
+|> Floki.find("span[data-testid=qsp-price-change]")
+|> List.first
+price_diff_str
+```
+
+```elixir
+price_diff = price_diff_str
+|> String.trim
+|> String.replace(",", "")
+|> String.to_float
+```
+
+```elixir
+{_, _, [time_str]} = doc
+|> Floki.find("div[slot=marketTimeNotice] span span")
+|> List.first
+time_str
+```
+
+```elixir
+defmodule T do
+  defp time_zone, do: "America/New_York"
+  defp this_year, do: Timex.now(time_zone()).year
+  
+  def date_time_from_str(date_time_str) do
+    cond do
+      date_time_str |> String.starts_with?("At close:") -> at_close(date_time_str)
+      true -> raise "Unknown datetime format: " <> date_time_str
+    end
+  end
+
+  defp at_close(time_str) do
+    %{"day" => day, "time" => time} = 
+      ~r/At close: (?<day>\w+ \w+) at (?<time>.* (AM|PM)).*/
+      |> Regex.named_captures(time_str)
+    date_time_str = day <> " " <> time
+    parse_date_time(date_time_str)
+  end
+
+  defp parse_date_time(date_time_str) do
+    {:ok, date_time} = date_time_str |> Timex.parse("{Mfull} {0D} {h12}:{m}:{s} {AM}")
+    # Defaults the year to "0000". Change it to this year.
+    date_time = %{date_time | year: this_year() }
+    date_time |> DateTime.from_naive!(time_zone())
+  end
+end
+```
+
+```elixir
+T.date_time_from_str(time_str)
+```
