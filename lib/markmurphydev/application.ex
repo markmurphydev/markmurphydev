@@ -17,7 +17,8 @@ defmodule Markmurphydev.Application do
       # Start a worker by calling: Markmurphydev.Worker.start_link(arg)
       # {Markmurphydev.Worker, arg},
       # Start to serve requests, typically the last entry
-      MarkmurphydevWeb.Endpoint
+      MarkmurphydevWeb.Endpoint,
+      Markmurphydev.Periodically
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

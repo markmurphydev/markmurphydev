@@ -1,4 +1,6 @@
 defmodule Markmurphydev.Periodically do
+  require Logger
+  alias Markmurphydev.Nasdaq
   use GenServer
 
   def start_link(_opts) do
@@ -7,16 +9,18 @@ defmodule Markmurphydev.Periodically do
 
   def init(state) do
     schedule_work()
-    {:noreply, state}
+    {:ok, state}
   end
 
   def handle_info(:work, state) do
-    # ... DO WORK HERE ...
-    {:noreplyl, state}
+    Nasdaq.get_nasdaq()
+
+    schedule_work()
+    {:noreply, state}
   end
 
   defp schedule_work() do
-    # 2 hours
+    # 2 hours in ms
     Process.send_after(self(), :work, 2 * 60 * 60 * 1000)
   end
 end
