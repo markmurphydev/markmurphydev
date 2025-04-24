@@ -59,7 +59,8 @@ defmodule Markmurphydev.MixProject do
       {:dns_cluster, "~> 0.1.1"},
       {:bandit, "~> 1.5"},
       {:tzdata, "~> 1.1"},
-      {:req, "~> 0.5.0"}
+      {:req, "~> 0.5.0"},
+      {:timex, "~> 3.7.11"}
     ]
   end
 
